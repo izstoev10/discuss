@@ -8,4 +8,7 @@ defmodule DiscussWeb.TopicController do
 
     render(conn, :new, changeset: changeset)
   end
+
+  def create(conn, %{"topic" => topic} = params) do
+  end
 end
