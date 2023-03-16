@@ -17,8 +17,13 @@ defmodule DiscussWeb.TopicController do
 
   def create(conn, %{"topic" => topic} = params) do
     case Topics.create_topic(topic) do
-      {:ok, post} -> IO.inspect(post)
-      {:error, changeset} -> render(conn, :new, changeset: changeset)
+      {:ok, post} ->
+        conn
+        |> put_flash(:info, "Topic Created")
+        |> redirect(to: DiscussWeb.Router.Helpers.topic_path(conn, :index))
+
+      {:error, changeset} ->
+        render(conn, :new, changeset: changeset)
     end
   end
 end
