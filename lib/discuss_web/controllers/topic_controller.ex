@@ -35,6 +35,14 @@ defmodule DiscussWeb.TopicController do
     render(conn, :index, topics: topics)
   end
 
+  def delete(conn, %{"id" => id}) do
+    Topics.get_topic!(id) |> Topics.delete_topic!()
+
+    conn
+    |> put_flash(:info, "Topic Deleted")
+    |> redirect(to: DiscussWeb.Router.Helpers.topic_path(conn, :index))
+  end
+
   def create(conn, %{"topic" => topic}) do
     case Topics.create_topic(topic) do
       {:ok, _topic} ->

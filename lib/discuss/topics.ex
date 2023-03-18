@@ -85,8 +85,8 @@ defmodule Discuss.Topics do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_topic(%Topic{} = topic) do
-    Repo.delete(topic)
+  def delete_topic!(%Topic{} = topic) do
+    Repo.delete!(topic)
   end
 
   @doc """
