@@ -6,6 +6,7 @@
 
 # General application configuration
 import Config
+import_config "secrets.exs"
 
 config :discuss,
   ecto_repos: [Discuss.Repo]
@@ -62,3 +63,17 @@ config :phoenix, :json_library, Jason
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
+
+config :ueberauth, Ueberauth,
+  providers: [
+    github: {Ueberauth.Strategy.Github, []}
+  ]
+
+config :ueberauth, Ueberauth,
+  providers: [
+    github: {Ueberauth.Strategy.Github, [default_scope: "user,public_repo"]}
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Github.OAuth,
+  client_id: Application.get_env(:my_app, MyApp.Secrets)[:client_id],
+  client_secret: Application.get_env(:my_app, MyApp.Secrets)[:client_secret]

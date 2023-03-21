@@ -2,6 +2,7 @@ defmodule DiscussWeb.Router do
   use DiscussWeb, :router
 
   pipeline :browser do
+    plug Ueberauth
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
@@ -23,6 +24,13 @@ defmodule DiscussWeb.Router do
     delete "/topics/:id", TopicController, :delete
     get "/topics/:id/edit", TopicController, :edit
     put "/topics/:topic_id", TopicController, :update
+  end
+
+  scope "/auth", DiscussWeb do
+    pipe_through :browser
+
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
   end
 
   # Other scopes may use custom stacks.
