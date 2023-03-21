@@ -6,7 +6,6 @@
 
 # General application configuration
 import Config
-import_config "secrets.exs"
 
 config :discuss,
   ecto_repos: [Discuss.Repo]
@@ -75,5 +74,5 @@ config :ueberauth, Ueberauth,
   ]
 
 config :ueberauth, Ueberauth.Strategy.Github.OAuth,
-  client_id: Application.get_env(:my_app, MyApp.Secrets)[:client_id],
-  client_secret: Application.get_env(:my_app, MyApp.Secrets)[:client_secret]
+  client_id: "d624071d4f110ee4486f",
+  client_secret: "a4b2a0222b1c7c4e6160aaf363432832345cf5de"
