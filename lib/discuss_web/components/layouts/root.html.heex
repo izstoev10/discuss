@@ -25,11 +25,13 @@
         <ul class="right">
           <%= if @conn.assigns[:user] do %>
             <li>
-              Logout
+              <%= link("Sign Out", to: DiscussWeb.Router.Helpers.auth_path(@conn, :signout)) %>
             </li>
           <% else %>
             <li>
-              <%= link "Sign in with Github", to: DiscussWeb.Router.Helpers.auth_path(@conn, :request, "github") %>
+              <%= link("Sign in with Github",
+                to: DiscussWeb.Router.Helpers.auth_path(@conn, :request, "github")
+              ) %>
             </li>
           <% end %>
         </ul>

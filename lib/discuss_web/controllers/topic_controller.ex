@@ -3,6 +3,11 @@ defmodule DiscussWeb.TopicController do
 
   alias Discuss.Topics.Topic
   alias Discuss.Topics
+  use Ecto.Schema
+  import Ecto.Query, warn: false
+  alias Discuss.Repo
+
+  plug DiscussWeb.Plugs.RequireAuth when action in [:new, :create, :edit, :update, :delete]
 
   def new(conn, _params) do
     changeset = Topic.changeset(%Topic{}, %{})
@@ -44,7 +49,12 @@ defmodule DiscussWeb.TopicController do
   end
 
   def create(conn, %{"topic" => topic}) do
-    case Topics.create_topic(topic) do
+    changeset =
+      conn.assigns.user
+      |> Ecto.build_assoc(:topics)
+      |> Topic.changeset(topic)
+
+    case Repo.insert(changeset) do
       {:ok, _topic} ->
         conn
         |> put_flash(:info, "Topic Created")
