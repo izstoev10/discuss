@@ -8,6 +8,7 @@ defmodule DiscussWeb.TopicController do
   alias Discuss.Repo
 
   plug DiscussWeb.Plugs.RequireAuth when action in [:new, :create, :edit, :update, :delete]
+  plug :check_topic_owner when action in [:edit, :update, :delete]
 
   def new(conn, _params) do
     changeset = Topic.changeset(%Topic{}, %{})
@@ -62,6 +63,17 @@ defmodule DiscussWeb.TopicController do
 
       {:error, changeset} ->
         render(conn, :new, changeset: changeset)
+    end
+  end
+
+  defp check_topic_owner(%{params: %{"id" => topic_id}} = conn, _params) do
+    if Repo.get(Topic, topic_id).user_id == conn.assigns.user.id do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You cannot edit that")
+      |> redirect(to: DiscussWeb.Router.Helpers.topic_path(conn, :index))
+      |> halt()
     end
   end
 end
